@@ -9,10 +9,10 @@ contract ERC721X is ERC721, IERC721X {
 
     address public immutable minter;
     address public immutable originAddress;
-    uint16 public immutable originChainId;
+    uint32 public immutable originChainId;
     mapping(uint256 => string) public _tokenURIs;
 
-    constructor(string memory _name, string memory _symbol, address _originAddress, uint16 _originChainId) ERC721(_name, _symbol) {
+    constructor(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) ERC721(_name, _symbol) {
         minter = msg.sender;
         originAddress = _originAddress;
         originChainId = _originChainId;
