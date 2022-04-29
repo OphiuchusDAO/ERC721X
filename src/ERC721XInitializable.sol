@@ -12,7 +12,7 @@ contract ERC721XInitializable is ERC721Upgradeable, IERC721X {
     uint32 public originChainId;
     mapping(uint256 => string) public _tokenURIs;
 
-    function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public {
+    function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public initializer {
         require(minter == address(0), "ALREADY_INIT");
         __ERC721_init(_name, _symbol);
         minter = msg.sender;
