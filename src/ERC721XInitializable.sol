@@ -2,18 +2,19 @@
 
 pragma solidity >=0.8.7 <0.9.0;
 
-import "solmate/tokens/ERC721.sol";
+import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/ERC721Upgradeable.sol";
 import "./interfaces/IERC721X.sol";
 
-contract ERC721XInitializable is ERC721, IERC721X {
+contract ERC721XInitializable is ERC721Upgradeable, IERC721X {
 
-    address public immutable minter;
-    address public immutable originAddress;
-    uint32 public immutable originChainId;
+    address public minter;
+    address public originAddress;
+    uint32 public originChainId;
     mapping(uint256 => string) public _tokenURIs;
 
-    function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) ERC721(_name, _symbol) public {
+    function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public {
         require(minter == address(0), "ALREADY_INIT");
+        __ERC721_init(_name, _symbol);
         minter = msg.sender;
         originAddress = _originAddress;
         originChainId = _originChainId;
