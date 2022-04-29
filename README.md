@@ -47,3 +47,6 @@ The contract has a special `mint` function which accepts the entire `tokenURI` t
 ...
 ```
 
+## ERC721XInitializable
+
+This is an identical contract to ERC721X, except instead of a constructor, it uses an `initialize` function in order to support deployment via `create2`
