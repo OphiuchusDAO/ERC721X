@@ -11,13 +11,13 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
     address public minter;
     address public originAddress;
     uint32 public originChainId;
+    bytes4 constant interfaceId = IERC721X.originChainId.selector ^ IERC721X.originAddress.selector;
     mapping(uint256 => string) public _tokenURIs;
 
     function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public initializer {
         require(minter == address(0), "ALREADY_INIT");
         __ERC721_init(_name, _symbol);
-        _registerInterface(IERC721X.originChainId.selector);
-        _registerInterface(IERC721X.originAddress.selector);
+        _registerInterface(interfaceId);
         minter = msg.sender;
         originAddress = _originAddress;
         originChainId = _originChainId;
@@ -38,7 +38,7 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
         _burn(_id);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165StorageUpgradeable, ERC721Upgradeable) returns (bool) {
-        return (ERC721Upgradeable.supportsInterface(interfaceId) || ERC165StorageUpgradeable.supportsInterface(interfaceId) );
+    function supportsInterface(bytes4 _interfaceId) public view virtual override(ERC165StorageUpgradeable, ERC721Upgradeable) returns (bool) {
+        return (ERC721Upgradeable.supportsInterface(_interfaceId) || ERC165StorageUpgradeable.supportsInterface(_interfaceId) );
     }
 }
