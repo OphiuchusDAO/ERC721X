@@ -5,8 +5,9 @@ pragma solidity >=0.8.7 <0.9.0;
 import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/ERC721Upgradeable.sol";
 import "openzeppelin-contracts-upgradeable/contracts/utils/introspection/ERC165StorageUpgradeable.sol";
 import "./interfaces/IERC721X.sol";
+import "./MinimalOwnableInitializable.sol";
 
-contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IERC721X {
+contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IERC721X, MinimalOwnableInitializable {
 
     address public minter;
     address public originAddress;
@@ -17,6 +18,7 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
     function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public initializer {
         require(minter == address(0), "ALREADY_INIT");
         __ERC721_init(_name, _symbol);
+        MinimalOwnableInitializable.initialize();
         _registerInterface(interfaceId);
         minter = msg.sender;
         originAddress = _originAddress;
@@ -31,6 +33,11 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
         require(minter == msg.sender, "UNAUTH");
         _safeMint(_to, _id);
         _tokenURIs[_id] = _tokenURI;
+    }
+
+    function setMinter(address _minter) external {
+        require(_owner == msg.sender);
+        minter = _minter;
     }
 
     function burn(uint256 _id) public {

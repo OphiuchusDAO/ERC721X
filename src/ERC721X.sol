@@ -4,21 +4,26 @@ pragma solidity >=0.8.7 <0.9.0;
 
 import "solmate/tokens/ERC721.sol";
 import "./interfaces/IERC721X.sol";
+import "./MinimalOwnable.sol";
 
-contract ERC721X is ERC721, IERC721X {
+contract ERC721X is ERC721, IERC721X, MinimalOwnable {
 
-    address public immutable minter;
+    address public minter;
     address public immutable originAddress;
     uint32 public immutable originChainId;
     bytes4 constant interfaceID = 0xefd00bbc;
     mapping(uint256 => string) public _tokenURIs;
 
-    constructor(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) ERC721(_name, _symbol) {
+    constructor(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) ERC721(_name, _symbol) MinimalOwnable() {
         minter = msg.sender;
         originAddress = _originAddress;
         originChainId = _originChainId;
     }
 
+    function setMinter(address _minter) external {
+        require(_owner == msg.sender);
+        minter = _minter;
+    }
 
     function supportsInterface(bytes4 _interfaceId) public view virtual override returns (bool) {
         return (_interfaceId == interfaceID || super.supportsInterface(_interfaceId));
