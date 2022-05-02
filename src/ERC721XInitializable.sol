@@ -15,6 +15,10 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
     bytes4 constant interfaceId = IERC721X.originChainId.selector ^ IERC721X.originAddress.selector;
     mapping(uint256 => string) public _tokenURIs;
 
+    constructor() {
+    _disableInitializers();
+    }
+
     function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public initializer {
         require(minter == address(0), "ALREADY_INIT");
         __ERC721_init(_name, _symbol);
