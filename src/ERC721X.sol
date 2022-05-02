@@ -10,12 +10,18 @@ contract ERC721X is ERC721, IERC721X {
     address public immutable minter;
     address public immutable originAddress;
     uint32 public immutable originChainId;
+    bytes4 constant interfaceID = 0xefd00bbc;
     mapping(uint256 => string) public _tokenURIs;
 
     constructor(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) ERC721(_name, _symbol) {
         minter = msg.sender;
         originAddress = _originAddress;
         originChainId = _originChainId;
+    }
+
+
+    function supportsInterface(bytes4 _interfaceId) public view virtual override returns (bool) {
+        return (_interfaceId == interfaceID || super.supportsInterface(_interfaceId));
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
