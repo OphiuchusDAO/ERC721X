@@ -7,6 +7,12 @@ ERC721X contracts maintain state relevant to their native chain.
 
 This repository includes the `IERC721X` interface as well as an implementation in `src/ERC721X.sol`.
 
+## Install
+
+Using foundry:
+
+`forge install @OphiuchusDAO/ERC721X`
+
 ## IERC721X
 
 The interface defines two functions necessary for maintaining bare minimum state which tracks an asset's native representation.

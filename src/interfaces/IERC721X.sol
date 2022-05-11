@@ -3,7 +3,7 @@
 pragma solidity >=0.8.7 <0.9.0;
 
 interface IERC721X {
-    function originChainId() external view returns (uint32);
+    function originChainId() external view returns (uint16);
     function originAddress() external view returns (address);
     function setMinter(address _minter) external;
 }
