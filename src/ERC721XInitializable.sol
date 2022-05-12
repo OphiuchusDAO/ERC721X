@@ -35,7 +35,7 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
 
     function mint(address _to, uint256 _id, string memory _tokenURI) public {
         require(minter == msg.sender, "UNAUTH");
-        _safeMint(_to, _id);
+        _mint(_to, _id);
         _tokenURIs[_id] = _tokenURI;
     }
 
