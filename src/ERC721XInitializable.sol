@@ -3,11 +3,12 @@
 pragma solidity >=0.8.7 <0.9.0;
 
 import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/ERC721Upgradeable.sol";
+import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/extensions/ERC721RoyaltyUpgradeable.sol";
 import "openzeppelin-contracts-upgradeable/contracts/utils/introspection/ERC165StorageUpgradeable.sol";
 import "./interfaces/IERC721X.sol";
 import "./MinimalOwnableInitializable.sol";
 
-contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IERC721X, MinimalOwnableInitializable {
+contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721RoyaltyUpgradeable, IERC721X, MinimalOwnableInitializable {
 
     address public minter;
     address public originAddress;
@@ -19,7 +20,7 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
     _disableInitializers();
     }
 
-    function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId) public initializer {
+    function initialize(string memory _name, string memory _symbol, address _originAddress, uint32 _originChainId, uint96 royaltyNumerator, address feeRecipient) public initializer {
         require(minter == address(0), "ALREADY_INIT");
         __ERC721_init(_name, _symbol);
         MinimalOwnableInitializable.initialize();
@@ -27,6 +28,7 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
         minter = msg.sender;
         originAddress = _originAddress;
         originChainId = _originChainId;
+        _setDefaultRoyalty(feeRecipient, royaltyNumerator);
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
@@ -49,7 +51,7 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721Upgradeable, IE
         _burn(_id);
     }
 
-    function supportsInterface(bytes4 _interfaceId) public view virtual override(ERC165StorageUpgradeable, ERC721Upgradeable) returns (bool) {
+    function supportsInterface(bytes4 _interfaceId) public view virtual override(ERC165StorageUpgradeable, ERC721RoyaltyUpgradeable) returns (bool) {
         return (ERC721Upgradeable.supportsInterface(_interfaceId) || ERC165StorageUpgradeable.supportsInterface(_interfaceId) );
     }
 }
