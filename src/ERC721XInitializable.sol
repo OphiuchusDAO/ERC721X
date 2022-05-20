@@ -2,7 +2,6 @@
 
 pragma solidity >=0.8.7 <0.9.0;
 
-import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/ERC721Upgradeable.sol";
 import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/extensions/ERC721RoyaltyUpgradeable.sol";
 import "openzeppelin-contracts-upgradeable/contracts/utils/introspection/ERC165StorageUpgradeable.sol";
 import "./interfaces/IERC721X.sol";
@@ -52,6 +51,6 @@ contract ERC721XInitializable is ERC165StorageUpgradeable, ERC721RoyaltyUpgradea
     }
 
     function supportsInterface(bytes4 _interfaceId) public view virtual override(ERC165StorageUpgradeable, ERC721RoyaltyUpgradeable) returns (bool) {
-        return (ERC721Upgradeable.supportsInterface(_interfaceId) || ERC165StorageUpgradeable.supportsInterface(_interfaceId) );
+        return (ERC721RoyaltyUpgradeable.supportsInterface(_interfaceId) || ERC165StorageUpgradeable.supportsInterface(_interfaceId) );
     }
 }
